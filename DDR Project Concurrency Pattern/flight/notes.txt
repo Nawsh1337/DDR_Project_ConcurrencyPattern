@@ -1,0 +1,64 @@
+15 large plane threads
+30 small thread planes
+
+
+
+runways:
+
+large planes: {1,4,6} {2,3,5}
+small planes: {1,2},{3,4},{5,6},{1,4},{2,3},{3,5},{4,6},{4,5},{3,6},{1,3},{2,4}
+
+can take runway either side
+
+states:
+idle: start with random idle time, land with random idle time
+
+awaiting takeoff: choose suitable runway randomly then choose order randomly
+
+taking off: move to runway chosen, announce id and position, sleep random time in runway, move to next cell, announce id 
+and position again till flying..
+
+flying: announce sleep duration and sleep, sleep ends procees further
+
+awaiting landing: announce runway, or sleep until able to proceed
+
+landing: move to runway chosen, announce id position, random sleep, move to next cell, repeat till destination, then idle state
+
+no long waits
+
+
+
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+pthread_t tid[2];
+int counter;
+pthread_mutex_t lock;
+
+void* trythis(void* arg)
+{
+	pthread_mutex_lock(&lock);
+
+	unsigned long i = 0;
+	counter += 1;
+	printf("\n Job %d has started\n", counter);
+
+	for (i = 0; i < (0xFFFFFFFF); i++)
+		;
+
+	printf("\n Job %d has finished\n", counter);
+
+	pthread_mutex_unlock(&lock);
+
+	return NULL;
+}
+
+int main(void)
+{
+	int i = 0;
+	int error;
+
+	if (pthread_mutex_init(&loc
